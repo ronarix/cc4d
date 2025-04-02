@@ -5,33 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer - CC4D Rhythmusspiel</title>
     <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            overflow: hidden; 
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Verhindert Scrollbalken */
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Hintergrund für den Fall, dass der Container nicht sofort füllt */
         }
         #model-container {
-            width: 100%;
-            height: 100vh;
+            width: 100vw; /* Volle Ansichtsbreite */
+            height: 100vh; /* Volle Ansichtshöhe */
+            position: relative; /* Wichtig für absolute Positionierung der Kinder */
             background: #f0f0f0;
         }
-        #loading {
+        #loading, #error {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
             color: #333;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         #error {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #d00;
-            display: none;
+            color: #d00; /* Rote Farbe für Fehler */
+            display: none; /* Standardmäßig ausblenden */
         }
         #controls {
             position: absolute;
@@ -39,10 +40,11 @@
             right: 20px;
             display: flex;
             gap: 10px;
+            z-index: 10; /* Stellt sicher, dass die Controls über dem Canvas liegen */
         }
         .control-button {
-            background: rgba(255, 255, 255, 0.8);
-            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -51,9 +53,16 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 1.5em; /* Größere Symbole */
+            font-weight: bold;
+            color: #333;
+            transition: background-color 0.2s;
         }
         .control-button:hover {
             background: white;
+        }
+        .control-button:active {
+             background: #eee;
         }
     </style>
 </head>
@@ -62,170 +71,203 @@
         <div id="loading">
             <h2>Lade 3D-Modell...</h2>
             <p>Das CC4D Rhythmusspiel wird geladen</p>
+            <!-- Optional: Spinner oder Fortschrittsanzeige hinzufügen -->
         </div>
         <div id="error">
-            <h2>Fehler beim Laden des 3D-Modells</h2>
-            <p>Bitte versuchen Sie es später erneut oder kontaktieren Sie den Support.</p>
+            <h2>Fehler beim Laden</h2>
+            <p>Das 3D-Modell konnte nicht geladen werden.<br>Bitte Konsole (F12) prüfen.</p>
         </div>
+        <!-- Der Three.js Canvas wird hier eingefügt -->
     </div>
-    <div id="controls">
+
+    <div id="controls" style="display: none;"> <!-- Controls initial ausblenden -->
         <button class="control-button" id="zoom-in" title="Vergrößern">+</button>
         <button class="control-button" id="zoom-out" title="Verkleinern">-</button>
         <button class="control-button" id="reset" title="Zurücksetzen">↻</button>
     </div>
 
+    <!-- Three.js Bibliotheken -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/STLLoader.js"></script>
-    
+
     <script>
-        // Initialisierung der Szene, Kamera und Renderer
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xf0f0f0);
-        
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
-        
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('model-container').appendChild(renderer.domElement);
-        
-        // Beleuchtung hinzufügen
-        const ambientLight = new THREE.AmbientLight(0x404040, 1);
-        scene.add(ambientLight);
-        
-        const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight1.position.set(1, 1, 1);
-        scene.add(directionalLight1);
-        
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight2.position.set(-1, -1, -1);
-        scene.add(directionalLight2);
-        
-        // OrbitControls für Kamerasteuerung
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.25;
-        
-        // Fallback-Modell erstellen, falls STL nicht geladen werden kann
-        function createFallbackModel() {
-            // Einfaches Würfelmodell als Fallback
-            const geometry = new THREE.BoxGeometry(2, 2, 2);
-            const material = new THREE.MeshPhongMaterial({
-                color: 0x3080ff,
-                specular: 0x111111,
-                shininess: 100
-            });
-            const cube = new THREE.Mesh(geometry, material);
-            scene.add(cube);
-            
-            // Fallback-Modell rotieren lassen
-            function animateFallback() {
-                requestAnimationFrame(animateFallback);
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.01;
-                controls.update();
-                renderer.render(scene, camera);
-            }
-            
-            animateFallback();
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error').style.display = 'block';
+        // Zugriff auf DOM-Elemente
+        const modelContainer = document.getElementById('model-container');
+        const loadingElement = document.getElementById('loading');
+        const errorElement = document.getElementById('error');
+        const controlsElement = document.getElementById('controls');
+
+        // --- Three.js Initialisierung ---
+        let scene, camera, renderer, controls, model;
+
+        function init() {
+            // Szene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f0);
+
+            // Kamera
+            const aspect = modelContainer.clientWidth / modelContainer.clientHeight;
+            camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+            camera.position.set(0, 1, 5); // Startposition etwas angepasst
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(modelContainer.clientWidth, modelContainer.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio); // Für schärfere Darstellung auf HiDPI-Displays
+            modelContainer.appendChild(renderer.domElement); // Canvas zum Container hinzufügen
+
+            // Beleuchtung
+            const ambientLight = new THREE.AmbientLight(0x404040, 2); // Etwas heller
+            scene.add(ambientLight);
+
+            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1.5);
+            directionalLight1.position.set(5, 5, 5).normalize();
+            scene.add(directionalLight1);
+
+            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight2.position.set(-5, -5, -5).normalize();
+            scene.add(directionalLight2);
+
+            // OrbitControls (WICHTIG: ohne THREE.)
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; // Für sanftere Bewegung
+            controls.dampingFactor = 0.1;
+            controls.minDistance = 1; // Minimaler Zoom
+            controls.maxDistance = 20; // Maximaler Zoom
+            controls.target.set(0, 0, 0); // Auf den Ursprung schauen
+            controls.update();
+
+            // --- Modell laden ---
+            loadModel();
+
+            // --- Event Listener ---
+            setupEventListeners();
+
+            // --- Animationsschleife starten (erst nach erfolgreichem Laden sinnvoll) ---
+            // animate(); // Wird jetzt im Loader-Callback gestartet
         }
-        
-        // STL-Loader für das 3D-Modell
-        const loader = new THREE.STLLoader();
-        let model;
-        let modelLoaded = false;
-        
-        // Timeout für Ladevorgang
-        const loadTimeout = setTimeout(() => {
-            if (!modelLoaded) {
-                console.error('STL loading timeout');
-                createFallbackModel();
+
+        function loadModel() {
+            // STLLoader (WICHTIG: ohne THREE.)
+            const loader = new STLLoader();
+            const modelPath = 'models/CC4D_Full.stl'; // Relativer Pfad!
+
+            console.log(`Versuche Modell zu laden von: ${modelPath}`);
+
+            loader.load(
+                modelPath,
+                function (geometry) { // Success Callback
+                    console.log("Modell erfolgreich geladen");
+                    loadingElement.style.display = 'none'; // Ladeanzeige ausblenden
+                    controlsElement.style.display = 'flex'; // Controls einblenden
+
+                    // Material
+                    const material = new THREE.MeshPhongMaterial({
+                        color: 0x0055aa, // Blauton
+                        specular: 0x111111,
+                        shininess: 50
+                    });
+
+                    // Mesh erstellen
+                    model = new THREE.Mesh(geometry, material);
+
+                    // Modell zentrieren und skalieren
+                    geometry.computeBoundingBox();
+                    const boundingBox = geometry.boundingBox;
+                    const center = new THREE.Vector3();
+                    boundingBox.getCenter(center);
+                    model.position.sub(center); // Verschiebt das Modell, sodass sein Zentrum im Ursprung liegt
+
+                    const size = new THREE.Vector3();
+                    boundingBox.getSize(size);
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const desiredSize = 4.0; // Gewünschte Größe des Modells in der Szene
+                    const scale = desiredSize / maxDim;
+                    model.scale.set(scale, scale, scale);
+
+                    // Modell zur Szene hinzufügen
+                    scene.add(model);
+
+                    // Kamera neu ausrichten, falls nötig (optional)
+                    // controls.target.copy(model.position); // Falls das Zentrum nicht 0,0,0 sein soll
+                    // controls.update();
+
+                    // Animationsschleife starten, *nachdem* das Modell geladen ist
+                    animate();
+                },
+                function (xhr) { // Progress Callback
+                    const percentLoaded = (xhr.loaded / xhr.total * 100);
+                    console.log(percentLoaded + '% geladen');
+                    // Hier könnte man eine Fortschrittsanzeige aktualisieren
+                    // loadingElement.querySelector('p').textContent = `Lade: ${Math.round(percentLoaded)}%`;
+                },
+                function (error) { // Error Callback
+                    console.error('Fehler beim Laden des STL-Modells:', error);
+                    loadingElement.style.display = 'none'; // Ladeanzeige ausblenden
+                    errorElement.style.display = 'block';  // Fehleranzeige einblenden
+                    // Hier könnte man ein Fallback-Modell laden oder nur die Fehlermeldung zeigen
+                }
+            );
+        }
+
+        function setupEventListeners() {
+            // Fenstergrößenänderung
+            window.addEventListener('resize', onWindowResize, false);
+
+            // Control Buttons
+            document.getElementById('zoom-in').addEventListener('click', () => {
+                // controls.dollyIn(1.2); // Alternative Zoom-Methode
+                camera.position.z = Math.max(camera.position.z - 1, controls.minDistance);
+                controls.update();
+            });
+
+            document.getElementById('zoom-out').addEventListener('click', () => {
+                // controls.dollyOut(1.2); // Alternative Zoom-Methode
+                camera.position.z = Math.min(camera.position.z + 1, controls.maxDistance);
+                controls.update();
+            });
+
+            document.getElementById('reset').addEventListener('click', () => {
+                controls.reset(); // Setzt Kamera und Ziel zurück
+                // Ggf. Startposition explizit setzen, falls controls.reset() nicht reicht
+                camera.position.set(0, 1, 5);
+                controls.target.set(0, 0, 0);
+                controls.update();
+            });
+        }
+
+        function onWindowResize() {
+            if (camera && renderer && modelContainer) {
+                camera.aspect = modelContainer.clientWidth / modelContainer.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(modelContainer.clientWidth, modelContainer.clientHeight);
             }
-        }, 10000); // 10 Sekunden Timeout
-        
-        loader.load(
-        'models/CC4D_Full.stl'
-         ,function (geometry) {
-                clearTimeout(loadTimeout);
-                modelLoaded = true;
-                
-                // Material für das Modell erstellen
-                const material = new THREE.MeshPhongMaterial({
-                    color: 0x3080ff,
-                    specular: 0x111111,
-                    shininess: 100
-                });
-                
-                // Mesh erstellen und zur Szene hinzufügen
-                model = new THREE.Mesh(geometry, material);
-                
-                // Modell zentrieren
-                geometry.computeBoundingBox();
-                const boundingBox = geometry.boundingBox;
-                const center = new THREE.Vector3();
-                boundingBox.getCenter(center);
-                model.position.set(-center.x, -center.y, -center.z);
-                
-                // Modell skalieren
-                const size = new THREE.Vector3();
-                boundingBox.getSize(size);
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 3 / maxDim;
-                model.scale.set(scale, scale, scale);
-                
-                scene.add(model);
-                
-                // Loading-Anzeige ausblenden
-                document.getElementById('loading').style.display = 'none';
-                
-                // Animationsschleife starten
-                animate();
-            },
-            function (xhr) {
-                // Ladefortschritt
-                console.log((xhr.loaded / xhr.total * 100) + '% geladen');
-            },
-            function (error) {
-                // Fehlerbehandlung
-                clearTimeout(loadTimeout);
-                console.error('Fehler beim Laden des STL-Modells', error);
-                createFallbackModel();
-            }
-        );
-        
-        // Steuerelemente
-        document.getElementById('zoom-in').addEventListener('click', function() {
-            camera.position.z -= 0.5;
-        });
-        
-        document.getElementById('zoom-out').addEventListener('click', function() {
-            camera.position.z += 0.5;
-        });
-        
-        document.getElementById('reset').addEventListener('click', function() {
-            camera.position.set(0, 0, 5);
-            controls.reset();
-        });
-        
-        // Fenstergrößenänderung
-        window.addEventListener('resize', function() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        
+        }
+
         // Animationsschleife
         function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
+            requestAnimationFrame(animate); // Fordert den nächsten Frame an
+
+            if (controls) {
+                controls.update(); // Erforderlich für Damping
+            }
+
+            // Optional: Modell langsam drehen
+            // if (model) {
+            //     model.rotation.y += 0.005;
+            // }
+
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera); // Rendert die Szene
+            }
         }
-        
-        // Starte die Animation sofort für bessere Benutzererfahrung
-        animate();
+
+        // --- Start ---
+        // Initialisierung aufrufen, sobald das DOM bereit ist (obwohl bei Skript am Ende nicht unbedingt nötig)
+        // document.addEventListener('DOMContentLoaded', init);
+        init(); // Direkter Aufruf, da Skript am Ende des Body steht
+
     </script>
 </body>
 </html>
