@@ -1,53 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- Sprache auf Deutsch setzen -->
+<html lang="de"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Added a description for SEO and context -->
-    <meta name="description" content="Showcase of the V4 3D model for a school project.">
+    <!-- Beschreibung auf Deutsch -->
+    <meta name="description" content="Präsentation des V4 3D-Modells für ein Schulprojekt.">
     
-    <title>V4 Model Showcase</title> <!-- More specific title -->
+    <!-- Titel auf Deutsch -->
+    <title>V4 Modell Präsentation</title> 
 
-    <!-- Hint to the browser to establish connection to the CDN early -->
+    <!-- Hinweis an den Browser, frühzeitig eine Verbindung zum CDN herzustellen -->
     <link rel="preconnect" href="https://unpkg.com">
 
-    <!-- Loads <model-viewer> for modern browsers: -->
+    <!-- Lädt <model-viewer> für moderne Browser: -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script> 
     
-    <!-- Loads <model-viewer> for older browsers: -->
+    <!-- Lädt <model-viewer> für ältere Browser: -->
     <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 
     <style>
-        /* Basic page styling */
+        /* Grundlegendes Seitenstyling */
         body {
             font-family: sans-serif;
-            margin: 0; /* Remove default body margin */
+            margin: 0; 
             padding: 0;
             box-sizing: border-box;
         }
         
-        /* Center content */
+        /* Inhalt zentrieren */
         .container {
             max-width: 900px;
             margin: 20px auto;
             padding: 15px;
-            text-align: center; /* Center headings and paragraphs */
+            text-align: center; /* Überschriften und Absätze zentrieren */
         }
 
         model-viewer {
-            width: 100%; /* Take full width of container */
-            max-width: 800px; /* Limit max width */
-            height: 600px; /* Adjust height as needed */
-            margin: 20px auto; /* Center the viewer block itself */
+            width: 100%; /* Volle Breite des Containers nutzen */
+            max-width: 800px; /* Maximale Breite begrenzen */
+            height: 600px; /* Höhe nach Bedarf anpassen */
+            margin: 20px auto; /* Den Viewer-Block selbst zentrieren */
             display: block;
-            border: 1px solid #eee; /* Subtle border */
-            border-radius: 8px; /* Slightly rounded corners */
-            background-color: #f8f8f8; /* Light background for the viewer area */
-            /* Default environment map for nice lighting without extra load */
+            border: 1px solid #eee; /* Dezenter Rahmen */
+            border-radius: 8px; /* Leicht abgerundete Ecken */
+            background-color: #f8f8f8; /* Heller Hintergrund für den Viewer-Bereich */
+            /* Standard-Umgebungskarte für gute Beleuchtung ohne zusätzliche Ladezeit */
             --mv-environment-image: neutral; 
         }
         
-        /* Styling for the loading progress bar */
+        /* Styling für den Ladefortschrittsbalken */
         .progress-bar {
             display: block;
             width: 33%;
@@ -58,24 +60,24 @@
             border-radius: 4px;
             box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
             background-color: #eee;
-            overflow: hidden; /* Ensure update-bar stays inside */
+            overflow: hidden; /* Stellt sicher, dass update-bar innen bleibt */
         }
 
         .update-bar {
-            background-color: #3498db; /* Blue progress color */
-            width: 0%; /* Starts at 0, model-viewer updates this */
+            background-color: #3498db; /* Blaue Fortschrittsfarbe */
+            width: 0%; /* Beginnt bei 0, model-viewer aktualisiert dies */
             height: 100%;
-            transition: width 0.3s ease-out; /* Smooth transition */
+            transition: width 0.3s ease-out; /* Sanfter Übergang */
         }
 
-        /* Optional: Hide the progress bar once loading is done */
+        /* Optional: Fortschrittsbalken ausblenden, sobald das Laden abgeschlossen ist */
         model-viewer.loaded .progress-bar {
              display: none;
         }
 
-        /* Style for the AR button if needed */
+        /* Style für den AR-Button bei Bedarf */
         #ar-button {
-            background-image: url(path/to/your/ar_icon.png); /* Optional: Custom icon */
+            background-image: url(pfad/zu/deinem/ar_icon.png); /* Optional: Eigenes Symbol */
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center;
@@ -89,9 +91,12 @@
             border-radius: 50%;
             border: none;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            /* Optional: Verstecke den Text, wenn nur ein Icon verwendet wird */
+            font-size: 0; 
+            color: transparent;
         }
         
-        /* Hide default AR prompt if using custom button */
+        /* Standard-AR-Aufforderung ausblenden, wenn ein benutzerdefinierter Button verwendet wird */
         model-viewer::part(default-ar-button) {
              display: none;
         }
@@ -101,42 +106,42 @@
 <body>
 
 <div class="container">
-    <h1>My 3D Model Showcase</h1>
-    <p>This is the V4 3D model created for my school project. You can rotate, zoom, and interact with it below.</p>
+    <!-- Überschrift auf Deutsch -->
+    <h1>Meine 3D-Modell Präsentation</h1>
+    <!-- Beschreibung auf Deutsch -->
+    <p>Dies ist das V4 3D-Modell, das für mein Schulprojekt erstellt wurde. Sie können es unten drehen, zoomen und damit interagieren.</p>
 
     <model-viewer 
-        src="/V4_fixed.stl"
+        src="/V4_fixed.glb" <!-- Stelle sicher, dass dieser Pfad korrekt ist und die .glb-Datei existiert -->
         
-        <!-- **RECOMMENDATION:** Convert your STL to GLB format for web. 
-             GLB files are generally smaller and load faster.
-             Example: src="models/V4_fixed.glb" -->
-             
-        <!-- **RECOMMENDATION:** Create a 2D image preview of your model.
-             Example: poster="models/V4_poster.png" -->
-        poster="models/V4_poster.png" <!-- Shows this image while loading -->
+        <!-- EMPFEHLUNG: Erstelle ein 2D-Vorschaubild deines Modells.
+             Beispiel: poster="models/V4_vorschau.png" 
+             Du musst dieses Bild selbst erstellen und hochladen. -->
+        poster="models/V4_poster.png" <!-- Zeigt dieses Bild während des Ladens, passe den Pfad ggf. an -->
 
-        alt="Interactive 3D model of the V4 project component" <!-- More descriptive alt text -->
-        auto-rotate <!-- Keep auto-rotation -->
-        camera-controls <!-- Enable user controls -->
-        shadow-intensity="1" <!-- Keep shadows -->
-        environment-image="neutral" <!-- Use neutral lighting, efficient -->
-        ar <!-- Enable AR functionality -->
-        ar-modes="webxr scene-viewer quick-look" <!-- Specify AR modes -->
+        alt="Interaktives 3D-Modell der V4-Projektkomponente" <!-- Alt-Text auf Deutsch -->
+        auto-rotate 
+        camera-controls 
+        shadow-intensity="1" 
+        environment-image="neutral" <!-- Neutrale Beleuchtung verwenden, effizient -->
+        ar <!-- AR-Funktionalität aktivieren -->
+        ar-modes="webxr scene-viewer quick-look" <!-- AR-Modi spezifizieren -->
         >
         
-        <!-- Loading progress bar slot -->
+        <!-- Ladefortschrittsbalken -->
         <div class="progress-bar" slot="progress-bar">
             <div class="update-bar"></div>
         </div>
 
-        <!-- Optional: Custom AR activation button -->
+        <!-- Optional: Benutzerdefinierter AR-Aktivierungsknopf -->
         <!-- <button slot="ar-button" id="ar-button">
-            View in AR
+            In AR ansehen 
         </button> -->
         
     </model-viewer>
 
-    <p>Use your mouse (or touch on mobile) to explore the model. Click the AR icon (if available on your device) to view it in your space.</p>
+    <!-- Anleitung auf Deutsch -->
+    <p>Benutzen Sie Ihre Maus (oder Touch auf Mobilgeräten), um das Modell zu erkunden. Klicken Sie auf das AR-Symbol (falls auf Ihrem Gerät verfügbar), um es in Ihrer Umgebung anzuzeigen.</p>
 </div>
 
 </body>
