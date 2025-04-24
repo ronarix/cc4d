@@ -1,644 +1,123 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CC4D Rhythmusspiel - Projektpräsentation</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="description" content="Präsentation des V4 3D-Modells für ein Schulprojekt.">
+    
+    <title>V4 Modell Präsentation</title> 
+
+    <link rel="preconnect" href="https://unpkg.com">
+
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script> 
+    <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+
     <style>
-        html {
-            scroll-behavior: smooth;
+        body {
+            font-family: sans-serif;
+            margin: 0; 
+            padding: 0;
+            box-sizing: border-box;
         }
-        .hero-gradient {
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ef4444);
+        
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 15px;
+            text-align: center; 
         }
-        .feature-icon {
-            width: 1rem;
-            height: 1rem;
-            border-radius: 9999px;
-            margin-top: 0.25rem;
-            margin-right: 0.5rem;
+
+        model-viewer {
+            width: 100%; 
+            max-width: 800px; 
+            height: 600px; 
+            margin: 20px auto; 
+            display: block;
+            border: 1px solid #eee; 
+            border-radius: 8px; 
+            background-color: #f8f8f8; 
+            --mv-environment-image: neutral; 
         }
-        .hardware-card {
-            transition: all 0.3s ease;
+        
+        .progress-bar {
+            display: block;
+            width: 33%;
+            height: 10px;
+            max-height: 2%;
+            margin: 10px auto;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+            background-color: #eee;
+            overflow: hidden; 
         }
-        .hardware-card:hover {
-            transform: translateY(-5px);
+
+        .update-bar {
+            background-color: #3498db; 
+            width: 0%; 
+            height: 100%;
+            transition: width 0.3s ease-out; 
         }
-        .model-viewer-container {
-            height: 500px;
-            position: relative;
-            background-color: #f3f4f6;
-            border-radius: 0.5rem;
-            overflow: hidden;
+
+        model-viewer.loaded .progress-bar {
+             display: none;
         }
-        .software-module {
-            transition: all 0.3s ease;
+
+        #ar-button {
+            background-image: url(pfad/zu/deinem/ar_icon.png); 
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            background-color: white;
+            position: absolute;
+            cursor: pointer;
+            bottom: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 0; 
+            color: transparent;
         }
-        .software-module:hover {
-            transform: translateY(-5px);
+        
+        model-viewer::part(default-ar-button) {
+             display: none;
         }
-        .code-block {
-            background-color: #1f2937;
-            color: #e5e7eb;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-family: monospace;
-            font-size: 0.875rem;
-            overflow-x: auto;
-        }
+
     </style>
 </head>
-<body class="antialiased text-gray-800 bg-gray-50">
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b">
-        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="font-bold text-xl">CC4D Rhythmusspiel</div>
-            <nav class="hidden md:block">
-                <ul class="flex space-x-6">
-                    <li><a href="#projektubersicht" class="hover:text-blue-600 transition">Projektübersicht</a></li>
-                    <li><a href="#hardware" class="hover:text-blue-600 transition">Hardware</a></li>
-                    <li><a href="#schaltplan" class="hover:text-blue-600 transition">Schaltplan</a></li>
-                    <li><a href="#3d-modell" class="hover:text-blue-600 transition">3D-Modell</a></li>
-                    <li><a href="#software" class="hover:text-blue-600 transition">Software</a></li>
-                </ul>
-            </nav>
-            <button class="md:hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
+<body>
+
+<div class="container">
+    <h1>Meine 3D-Modell Präsentation</h1>
+    <p>Dies ist das V4 3D-Modell, das für mein Schulprojekt erstellt wurde. Sie können es unten drehen, zoomen und damit interagieren.</p>
+
+    <model-viewer 
+        src="V4_fixed.glb"  <!-- KORRIGIERTER PFAD -->
+        poster="V4_poster.png" <!-- KORRIGIERTER PFAD -->
+        alt="Interaktives 3D-Modell der V4-Projektkomponente" 
+        auto-rotate 
+        camera-controls 
+        shadow-intensity="1" 
+        environment-image="neutral" 
+        ar 
+        ar-modes="webxr scene-viewer quick-look" 
+        >
+        
+        <div class="progress-bar" slot="progress-bar">
+            <div class="update-bar"></div>
         </div>
-    </header>
 
-    <main class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold text-center mb-8">Rhythmusspiel CC4D</h1>
+        <!-- <button slot="ar-button" id="ar-button">
+            In AR ansehen 
+        </button> -->
         
-        <!-- Hero Section -->
-        <section class="mb-16">
-            <div class="hero-gradient p-8 rounded-lg shadow-lg text-white">
-                <h2 class="text-3xl font-bold mb-4">Interaktives 4-Spieler-Rhythmusspiel</h2>
-                <p class="mb-6">
-                    Ein interaktives 4-Spieler-Spiel, das auf dem Prinzip des klassischen LED-Memory-Spiels "Simon" basiert.
-                    Vier Spieler treten gegeneinander an und müssen eine zentral vorgegebene Farbsequenz möglichst schnell und korrekt nachbilden.
-                </p>
-                <div class="flex flex-wrap gap-4 justify-center">
-                    <a href="#projektubersicht" class="bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-blue-100 transition">
-                        Projektübersicht
-                    </a>
-                    <a href="#hardware" class="bg-white text-purple-600 px-6 py-2 rounded-full font-bold hover:bg-blue-100 transition">
-                        Hardware
-                    </a>
-                    <a href="#schaltplan" class="bg-white text-red-600 px-6 py-2 rounded-full font-bold hover:bg-blue-100 transition">
-                        Schaltplan
-                    </a>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Project Overview Section -->
-        <section id="projektubersicht" class="mb-16">
-            <h2 class="text-3xl font-bold mb-6 border-b pb-2">Projektübersicht</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <p class="mb-4">
-                        Das Rhythmusspiel CC4D ist ein interaktives 4-Spieler-Spiel, das auf dem Prinzip des klassischen LED-Memory-Spiels "Simon" basiert. 
-                        Vier Spieler treten gegeneinander an und müssen eine zentral vorgegebene Farbsequenz möglichst schnell und korrekt nachbilden.
-                    </p>
-                    <p>
-                        Das Spiel bietet visuelles Feedback über LEDs und LCD-Displays sowie akustisches Feedback über einen Buzzer und verfügt über ein 
-                        Punktesystem zur Echtzeit-Anzeige des Spielstands.
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-3">Hauptmerkmale</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-start">
-                            <span class="feature-icon bg-red-500"></span>
-                            <span>4-Spieler-Modus: Simultanes Spielen für vier Personen</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="feature-icon bg-green-500"></span>
-                            <span>Master-Sequenz: Zentrale Anzeige einer zufälligen Farbsequenz</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="feature-icon bg-blue-500"></span>
-                            <span>Individuelle Spielerbereiche: Jeder Spieler hat vier farbige Arcade-Buttons</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="feature-icon bg-yellow-500"></span>
-                            <span>Visuelles und akustisches Feedback für Spielereignisse</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Hardware Components Section -->
-        <section id="hardware" class="mb-16">
-            <h2 class="text-3xl font-bold mb-6 border-b pb-2">Hardwarekomponenten</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="hardware-card bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="text-blue-600 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                            <rect x="9" y="9" width="6" height="6"></rect>
-                            <line x1="9" y1="1" x2="9" y2="4"></line>
-                            <line x1="15" y1="1" x2="15" y2="4"></line>
-                            <line x1="9" y1="20" x2="9" y2="23"></line>
-                            <line x1="15" y1="20" x2="15" y2="23"></line>
-                            <line x1="20" y1="9" x2="23" y2="9"></line>
-                            <line x1="20" y1="14" x2="23" y2="14"></line>
-                            <line x1="1" y1="9" x2="4" y2="9"></line>
-                            <line x1="1" y1="14" x2="4" y2="14"></line>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Mikrocontroller</h3>
-                    <p class="text-gray-700">Arduino Mega</p>
-                    <p class="mt-2 text-sm text-gray-600">Zentrales Steuerungselement des Projekts mit ausreichend I/O-Pins für alle Komponenten.</p>
-                </div>
-                
-                <div class="hardware-card bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="text-blue-600 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <circle cx="12" cy="12" r="4"></circle>
-                            <line x1="12" y1="2" x2="12" y2="4"></line>
-                            <line x1="12" y1="20" x2="12" y2="22"></line>
-                            <line x1="2" y1="12" x2="4" y2="12"></line>
-                            <line x1="20" y1="12" x2="22" y2="12"></line>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Arcade-Buttons</h3>
-                    <p class="text-gray-700">16x EG STARTS Arcade Square LED-Buttons</p>
-                    <p class="mt-2 text-sm text-gray-600">33mm, 12V, mit integrierten LEDs für visuelles Feedback.</p>
-                </div>
-                
-                <div class="hardware-card bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="text-blue-600 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="3" y1="9" x2="21" y2="9"></line>
-                            <line x1="3" y1="15" x2="21" y2="15"></line>
-                            <line x1="9" y1="3" x2="9" y2="21"></line>
-                            <line x1="15" y1="3" x2="15" y2="21"></line>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">WS2812B LEDs</h3>
-                    <p class="text-gray-700">16x BTF-LIGHTING WS2812B ECO RGB</p>
-                    <p class="mt-2 text-sm text-gray-600">5050 SMD, 5V, für die zentrale Master-Sequenz-Anzeige.</p>
-                </div>
-                
-                <div class="hardware-card bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="text-blue-600 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">LCD Displays</h3>
-                    <p class="text-gray-700">4x I2C LCD Displays</p>
-                    <p class="mt-2 text-sm text-gray-600">Für die Anzeige von Spielinformationen für jeden Spieler.</p>
-                </div>
-                
-                <div class="hardware-card bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="text-blue-600 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                            <line x1="12" y1="19" x2="12" y2="22"></line>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Buzzer</h3>
-                    <p class="text-gray-700">1x Buzzer</p>
-                    <p class="mt-2 text-sm text-gray-600">Für akustisches Feedback und Soundeffekte während des Spiels.</p>
-                </div>
-                
-                <div class="hardware-card bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="text-blue-600 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                            <path d="M4 22h16"></path>
-                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">MOSFET-Transistoren</h3>
-                    <p class="text-gray-700">16x ALLECIN IRLZ44N</p>
-                    <p class="mt-2 text-sm text-gray-600">N-Kanal, 55V, 47A, für die Ansteuerung der Button-LEDs.</p>
-                </div>
-                
-                <div class="hardware-card bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="text-blue-600 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 7V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v3"></path>
-                            <rect x="4" y="7" width="16" height="12" rx="2" ry="2"></rect>
-                            <circle cx="12" cy="14" r="3"></circle>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Stromversorgung</h3>
-                    <p class="text-gray-700">12V 2A Netzteil & Buck Converter</p>
-                    <p class="mt-2 text-sm text-gray-600">Für die Versorgung der 12V- und 5V-Komponenten.</p>
-                </div>
-                
-                <div class="hardware-card bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <div class="text-blue-600 mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"></path>
-                            <path d="M2 20h20"></path>
-                            <path d="M14 12v.01"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Drucktastenschalter</h3>
-                    <p class="text-gray-700">Gebildet 22mm Edelstahl Latching</p>
-                    <p class="mt-2 text-sm text-gray-600">Blau LED, 12V-24V, 5A, für die Ein/Aus-Schaltung.</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Circuit Diagram Section -->
-        <section id="schaltplan" class="mb-16">
-            <h2 class="text-3xl font-bold mb-6 border-b pb-2">Schaltplan</h2>
-            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-                <img src="schaltplan.png" alt="Schaltplan des CC4D Rhythmusspiels" class="w-full h-auto">
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-3">Arcade-Buttons mit LED-Ansteuerung</h3>
-                    <p class="mb-4">
-                        Jeder der 16 Arcade-Buttons (4 pro Spieler) ist mit einem MOSFET-Transistor verbunden, 
-                        der die integrierte 12V-LED ansteuert.
-                    </p>
-                    <p class="mb-4">
-                        <strong>Verbindungen pro Button:</strong><br>
-                        - Button-Kontakt: Verbunden mit 5V und einem digitalen Eingangspin des Arduino über einen 10kΩ Pull-Down-Widerstand<br>
-                        - Button-LED: Anode (+) mit 12V, Kathode (-) mit dem Drain des MOSFET<br>
-                        - MOSFET: Source mit GND, Gate über einen 1kΩ Widerstand mit einem digitalen Ausgangspin des Arduino
-                    </p>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-3">WS2812B LEDs für Master-Sequenz</h3>
-                    <p class="mb-4">
-                        Die 16 WS2812B LEDs sind in vier Farbgruppen mit je 4 LEDs angeordnet und werden über 
-                        eine serielle Datenleitung angesteuert.
-                    </p>
-                    <p class="mb-4">
-                        <strong>Verbindungen:</strong><br>
-                        - VCC: 5V<br>
-                        - GND: GND<br>
-                        - DIN: Arduino Pin D6 über einen 470Ω Widerstand<br>
-                        - DOUT: In Reihe zum DIN der nächsten LED
-                    </p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- 3D Model Section -->
-        <section id="3d-modell" class="mb-16">
-            <h2 class="text-3xl font-bold mb-6 border-b pb-2">3D-Modell</h2>
-            <div class="model-viewer-container">
-                <iframe src="model-viewer.html" width="100%" height="100%" frameborder="0"></iframe>
-            </div>
-            <p class="text-center text-gray-600 mt-4">
-                Interaktives 3D-Modell des CC4D Rhythmusspiels
-            </p>
-        </section>
-        
-        <!-- Software Architecture Section -->
-        <section id="software" class="mb-16">
-            <h2 class="text-3xl font-bold mb-6 border-b pb-2">Software-Architektur</h2>
-            <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200 mb-6">
-                <h3 class="text-xl font-bold mb-3 text-blue-600">Modularer Aufbau</h3>
-                <p class="text-gray-700">
-                    Der Code für das Rhythmusspiel CC4D ist modular aufgebaut und in mehrere Dateien unterteilt, 
-                    die jeweils spezifische Funktionalitäten kapseln. Diese Architektur ermöglicht eine bessere 
-                    Wartbarkeit und Erweiterbarkeit des Projekts.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Hauptmodul</h3>
-                    <p class="text-gray-700">
-                        <code>rhythmusspiel_cc4d.ino</code>
-                        <br />
-                        Enthält die setup() und loop() Funktionen, initialisiert alle Komponenten und steuert den Spielablauf.
-                    </p>
-                    <div class="mt-4 code-block">
-                        <pre>
-void setup() {
-  initHardware();
-  initDisplays();
-  showWelcomeScreen();
-  // ...
-}
+    </model-viewer>
 
-void loop() {
-  switch(gameState) {
-    case STATE_IDLE:
-      // ...
-    case STATE_SEQUENCE:
-      // ...
-    // ...
-  }
-}</pre>
-                    </div>
-                </div>
-                
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Konfigurationsmodul</h3>
-                    <p class="text-gray-700">
-                        <code>config.h</code>
-                        <br />
-                        Enthält alle Pin-Definitionen, Spielparameter und anpassbare Konstanten für das Spiel.
-                    </p>
-                    <div class="mt-4 code-block">
-                        <pre>
-// Pin-Definitionen
-#define PLAYER1_BTN_RED 22
-#define PLAYER1_BTN_GREEN 23
-// ...
+    <p>Benutzen Sie Ihre Maus (oder Touch auf Mobilgeräten), um das Modell zu erkunden. Klicken Sie auf das AR-Symbol (falls auf Ihrem Gerät verfügbar), um es in Ihrer Umgebung anzuzeigen.</p>
+</div>
 
-// Spielparameter
-#define MAX_SEQUENCE_LENGTH 20
-#define INITIAL_SEQUENCE_LENGTH 3
-// ...</pre>
-                    </div>
-                </div>
-                
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Hardware-Modul</h3>
-                    <p class="text-gray-700">
-                        <code>hardware.h</code>
-                        <br />
-                        Initialisiert die Hardware-Komponenten und stellt Grundfunktionen zur Ansteuerung bereit.
-                    </p>
-                    <div class="mt-4 code-block">
-                        <pre>
-void initHardware() {
-  // Buttons als Eingänge konfigurieren
-  for(int i = 0; i < NUM_BUTTONS; i++) {
-    pinMode(buttonPins[i], INPUT);
-  }
-  
-  // LEDs als Ausgänge konfigurieren
-  // ...
-}</pre>
-                    </div>
-                </div>
-                
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Spiellogik-Modul</h3>
-                    <p class="text-gray-700">
-                        <code>game_logic.h</code>
-                        <br />
-                        Verwaltet den Spielzustand, die Runden und steuert den Spielablauf.
-                    </p>
-                </div>
-                
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Master-Sequenz-Modul</h3>
-                    <p class="text-gray-700">
-                        <code>master_sequence.h</code>
-                        <br />
-                        Generiert zufällige Sequenzen und zeigt sie über die WS2812B LEDs an.
-                    </p>
-                </div>
-                
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Spielereingabe-Modul</h3>
-                    <p class="text-gray-700">
-                        <code>player_input.h</code>
-                        <br />
-                        Erkennt Tasteneingaben, führt Debouncing durch und vergleicht mit der Master-Sequenz.
-                    </p>
-                </div>
-                
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Display-Modul</h3>
-                    <p class="text-gray-700">
-                        <code>display.h</code>
-                        <br />
-                        Initialisiert die I2C LCD Displays und zeigt Spielinformationen an.
-                    </p>
-                </div>
-                
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Feedback-Modul</h3>
-                    <p class="text-gray-700">
-                        <code>feedback.h</code>
-                        <br />
-                        Steuert die visuellen und akustischen Effekte für Spielereignisse.
-                    </p>
-                </div>
-                
-                <div class="software-module bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Punktesystem-Modul</h3>
-                    <p class="text-gray-700">
-                        <code>scoring.h</code>
-                        <br />
-                        Berechnet und speichert die Punkte und verwaltet die Rangliste.
-                    </p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Game Mechanics Section -->
-        <section id="spielmechanik" class="mb-16">
-            <h2 class="text-3xl font-bold mb-6 border-b pb-2">Spielmechanik</h2>
-            <div class="bg-gray-900 text-white rounded-lg shadow-md p-6 overflow-hidden">
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold mb-3">Spielablauf Simulation</h3>
-                    <p class="text-gray-300 mb-4">
-                        Das CC4D Rhythmusspiel basiert auf dem Prinzip, dass Spieler eine vorgegebene Farbsequenz 
-                        nachbilden müssen. Hier ist eine vereinfachte Darstellung des Spielablaufs.
-                    </p>
-                </div>
-                
-                <div class="flex justify-center space-x-4 my-8">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold" style="background-color: rgb(220, 38, 38);">R</div>
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold" style="background-color: rgb(22, 163, 74);">G</div>
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold" style="background-color: rgb(37, 99, 235);">B</div>
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold" style="background-color: rgb(202, 138, 4);">Y</div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                    <div>
-                        <h3 class="text-xl font-bold mb-3">Punktesystem</h3>
-                        <p class="text-gray-300 mb-4">
-                            Das Punktesystem bewertet die Leistung der Spieler basierend auf Geschwindigkeit und Korrektheit.
-                        </p>
-                        <div class="bg-gray-800 p-4 rounded-lg">
-                            <h4 class="font-bold mb-2">Punkteformel:</h4>
-                            <p class="font-mono">Punkte = Basispunkte × Sequenzlänge + Zeitbonus + Reihenfolge-Bonus - Fehlerpenalty</p>
-                            <ul class="mt-4 space-y-2 text-sm">
-                                <li><span class="font-bold">Basispunkte:</span> 10 Punkte pro korrektem Element</li>
-                                <li><span class="font-bold">Zeitbonus:</span> (Maximale Zeit - Benötigte Zeit) × Zeitfaktor</li>
-                                <li><span class="font-bold">Reihenfolge-Bonus:</span> 1. Platz: 50 Punkte, 2. Platz: 30 Punkte, usw.</li>
-                                <li><span class="font-bold">Fehlerpenalty:</span> 5 Punkte pro Fehler</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h3 class="text-xl font-bold mb-3">Feedback-Mechanismen</h3>
-                        <div class="grid grid-cols-1 gap-4">
-                            <div class="bg-gray-800 p-4 rounded-lg">
-                                <h4 class="font-bold mb-2">Visuelles Feedback</h4>
-                                <ul class="space-y-1 text-sm">
-                                    <li>LED-Feedback in den Arcade-Buttons</li>
-                                    <li>WS2812B RGB LEDs für Sequenz und Animationen</li>
-                                    <li>LCD-Display-Feedback für Spielinformationen</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="bg-gray-800 p-4 rounded-lg">
-                                <h4 class="font-bold mb-2">Akustisches Feedback</h4>
-                                <ul class="space-y-1 text-sm">
-                                    <li>Rot: 262 Hz (C4)</li>
-                                    <li>Grün: 330 Hz (E4)</li>
-                                    <li>Blau: 392 Hz (G4)</li>
-                                    <li>Gelb: 523 Hz (C5)</li>
-                                    <li>Spezielle Töne für Spielereignisse</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-8">
-                    <h3 class="text-xl font-bold mb-3">Spieler-Interface</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="bg-gray-800 p-4 rounded-lg">
-                            <h4 class="font-bold mb-2 text-center">Spieler 1</h4>
-                            <div class="grid grid-cols-2 gap-4">
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(220, 38, 38);">R</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(22, 163, 74);">G</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(37, 99, 235);">B</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(202, 138, 4);">Y</button>
-                            </div>
-                            <div class="bg-gray-800 p-4 mt-4">
-                                <div class="text-center">Punkte: <span class="text-2xl font-bold">120</span></div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-800 p-4 rounded-lg">
-                            <h4 class="font-bold mb-2 text-center">Spieler 2</h4>
-                            <div class="grid grid-cols-2 gap-4">
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(220, 38, 38);">R</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(22, 163, 74);">G</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(37, 99, 235);">B</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(202, 138, 4);">Y</button>
-                            </div>
-                            <div class="bg-gray-800 p-4 mt-4">
-                                <div class="text-center">Punkte: <span class="text-2xl font-bold">85</span></div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-800 p-4 rounded-lg">
-                            <h4 class="font-bold mb-2 text-center">Spieler 3</h4>
-                            <div class="grid grid-cols-2 gap-4">
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(220, 38, 38);">R</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(22, 163, 74);">G</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(37, 99, 235);">B</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(202, 138, 4);">Y</button>
-                            </div>
-                            <div class="bg-gray-800 p-4 mt-4">
-                                <div class="text-center">Punkte: <span class="text-2xl font-bold">150</span></div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-800 p-4 rounded-lg">
-                            <h4 class="font-bold mb-2 text-center">Spieler 4</h4>
-                            <div class="grid grid-cols-2 gap-4">
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(220, 38, 38);">R</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(22, 163, 74);">G</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(37, 99, 235);">B</button>
-                                <button class="w-full h-16 rounded-lg flex items-center justify-center text-xl font-bold" style="background-color: rgb(202, 138, 4);">Y</button>
-                            </div>
-                            <div class="bg-gray-800 p-4 mt-4">
-                                <div class="text-center">Punkte: <span class="text-2xl font-bold">95</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Future Extensions Section -->
-        <section id="erweiterungen" class="mb-16">
-            <h2 class="text-3xl font-bold mb-6 border-b pb-2">Zukünftige Erweiterungen</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Hardware-Erweiterungen</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Maßgeschneidertes 3D-gedrucktes Gehäuse</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Zusätzliche Umgebungsbeleuchtung mit WS2812B LED-Streifen</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Verbessertes Audiosystem mit Lautsprecher und Verstärker</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Upgrade auf größere oder grafische Displays</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold mb-3 text-blue-600">Software-Erweiterungen</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Verschiedene Spielmodi (Schwierigkeitsgrade, Kooperativ, Zeitdruck)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Highscore-System mit EEPROM-Speicherung</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Erweiterte visuelle Effekte und Animationen</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Erweiterte akustische Effekte und Hintergrundmusik</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer class="mt-16 pt-8 border-t text-center text-gray-500">
-            <p>© 2025 CC4D Rhythmusspiel Projekt - Berufsschulprojekt</p>
-        </footer>
-    </main>
 </body>
 </html>
